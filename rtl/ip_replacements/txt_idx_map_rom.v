@@ -7,7 +7,7 @@ module txt_idx_map_rom (
     (* rom_style = "block" *) reg [4:0] mem [0:255];
 
     initial begin
-        $readmemh("C:/Users/32915/Desktop/shudiankeshe/mem/txt_idx_map.mem", mem);
+        $readmemh("D:/codes/mc/minecraft-fpga/mem/txt_idx_map.mem", mem);
     end
 
     always @(posedge clka) begin

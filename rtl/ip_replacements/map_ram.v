@@ -15,7 +15,7 @@ module map_ram (
     (* ram_style = "block" *) reg [4:0] mem [0:131071];
 
     initial begin
-        $readmemh("C:/Users/32915/Desktop/shudiankeshe/mem/map_test.mem", mem);
+        $readmemh("D:/codes/mc/minecraft-fpga/mem/map_test.mem", mem);
     end
 
     always @(posedge clka) begin

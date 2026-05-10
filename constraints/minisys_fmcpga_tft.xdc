@@ -7,6 +7,10 @@ set_property PACKAGE_PIN Y18 [get_ports clk_100m]
 set_property IOSTANDARD LVCMOS33 [get_ports clk_100m]
 create_clock -period 10.000 -name sys_clk [get_ports clk_100m]
 
+## Buzzer
+set_property PACKAGE_PIN A19 [get_ports buzzer]
+set_property IOSTANDARD LVCMOS33 [get_ports buzzer]
+
 ## Buttons
 set_property PACKAGE_PIN R1  [get_ports btn_up]
 set_property PACKAGE_PIN P1  [get_ports btn_down]

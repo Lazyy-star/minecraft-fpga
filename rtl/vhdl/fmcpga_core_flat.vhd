@@ -14,6 +14,7 @@ entity fmcpga_core_flat is
         btn_front_in, btn_back_in, btn_left_in, btn_right_in, btn_up_in, btn_down_in: in std_logic;
         place_in: in std_logic;
         dig_in: in std_logic;
+        view_mode_in: in std_logic;
         selected_block_in: in std_logic_vector(BLOCK_TYPE_RADIX - 1 downto 0);
 
         disp_read_clk: in std_logic;
@@ -675,11 +676,21 @@ begin
                 current_pos => current_pos,
                 current_angle => current_angle
             );
-        move_lr_offset <= 127 when btn_right = '1' else -128 when btn_left = '1' else 0;
-        move_fb_offset <= 127 when btn_front = '1' else -128 when btn_back = '1' else 0;
+        move_lr_offset <= 0 when view_mode_in = '1' else
+            127 when btn_right = '1' else
+            -128 when btn_left = '1' else
+            0;
+        move_fb_offset <= 0 when view_mode_in = '1' else
+            127 when btn_front = '1' else
+            -128 when btn_back = '1' else
+            0;
         move_ud_offset <= 0;
-        angle_lr_offset <= 0;
-        angle_ud_offset <= 0;
+        angle_lr_offset <= 127 when view_mode_in = '1' and btn_right = '1' else
+            -128 when view_mode_in = '1' and btn_left = '1' else
+            0;
+        angle_ud_offset <= 127 when view_mode_in = '1' and btn_front = '1' else
+            -128 when view_mode_in = '1' and btn_back = '1' else
+            0;
         left_click <= '0';
         right_click <= '0';
         last_item_click <= '0';

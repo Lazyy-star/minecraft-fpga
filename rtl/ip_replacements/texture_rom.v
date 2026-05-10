@@ -7,7 +7,7 @@ module texture_rom (
     (* rom_style = "block" *) reg [31:0] mem [0:8191];
 
     initial begin
-        $readmemh("C:/Users/32915/Desktop/shudiankeshe/mem/textures.mem", mem);
+        $readmemh("D:/codes/mc/minecraft-fpga/mem/textures.mem", mem);
     end
 
     always @(posedge clka) begin

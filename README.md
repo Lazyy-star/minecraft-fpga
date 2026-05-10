@@ -15,6 +15,7 @@ The project keeps the original FmcPGA VHDL render core and wraps it with Verilog
 
 - `rtl/top/`: Minisys top modules
 - `rtl/adapter/`: TFT frame-buffer mapping and color adapters
+- `rtl/audio/`: buzzer background music and interaction sound-effect modules
 - `rtl/ip_replacements/`: Verilog replacements for original Vivado IP module names
 - `rtl/vhdl/`: Flat VHDL wrapper around the FmcPGA core
 - `vendor/FmcPGA/`: Imported FmcPGA HDL and resources
@@ -25,16 +26,17 @@ The project keeps the original FmcPGA VHDL render core and wraps it with Verilog
 
 ## Controls
 
-- `S1`: move right
-- `S2`: move left
-- `S3`: move forward
-- `S4`: move backward
-- `S5`: action button
+- `S1`: move right, or rotate view right when `SW[6] = 1`
+- `S2`: move left, or rotate view left when `SW[6] = 1`
+- `S3`: move forward, or rotate view up when `SW[6] = 1`
+- `S4`: move backward, or rotate view down when `SW[6] = 1`
+- `S5`: action button, places the selected block
 - `S6`: reset
 - `SW[4:0]`: selected block id, recommended range `0` to `23`
 - `SW[5]`: action mode, `0` = place selected block, `1` = dig selected block
+- `SW[6]`: view mode, `0` = movement, `1` = rotate view
 
-S5 performs one action per press. Digging is not continuous while `SW[5]` is held.
+S5 performs one action per press. Digging is not continuous while `SW[5]` is held. The lower-right TFT HUD shows the current `SW[4:0]` selected block. The buzzer on pin A19 plays background music and short interaction sounds.
 
 ## Build
 
@@ -74,4 +76,3 @@ program_hw_devices [current_hw_device]
 ## Notes
 
 The original FmcPGA project is GPL-licensed. This repository includes imported FmcPGA source and resources under `vendor/FmcPGA/`; keep the upstream license when publishing or redistributing.
-

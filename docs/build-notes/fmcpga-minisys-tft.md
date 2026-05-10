@@ -101,3 +101,13 @@ S6: reset
 S1-S4 only move. S5 performs one action per press. With `SW[5] = 0`, S5 places the block selected by `SW[4:0]`. With `SW[5] = 1`, S5 digs the block selected by the crosshair.
 
 Recommended block ids for `SW[4:0]` are `0` through `23`, matching the original FmcPGA block set. Higher values are representable in the 5-bit map storage but may not have valid texture mappings.
+
+## Audio, Rotation, and Held Block HUD
+
+The top-level design now drives the Minisys buzzer on pin A19 through `buzzer`.
+
+`SW[6]` selects movement or view-rotation mode. In movement mode, S1-S4 move the player. In view mode, S1-S4 rotate the camera and do not move the player.
+
+The selected block is shown by a lower-right TFT HUD overlay. The HUD uses a compact RGB444 color palette keyed by `SW[4:0]`.
+
+Run `scripts/check_audio_rotation_hud.ps1` after changes to audio, controls, display overlay, or project source lists.
