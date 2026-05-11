@@ -31,6 +31,7 @@ set_property file_type {VHDL 2008} [get_files $vhdl_files]
 
 add_files -norecurse [glob ./rtl/tft/*.v]
 add_files -norecurse [glob ./rtl/adapter/*.v]
+add_files -norecurse [glob ./rtl/audio/*.v]
 add_files -norecurse [glob ./rtl/ip_replacements/*.v]
 add_files -norecurse ./rtl/top/minisys_fmcpga_tft_top.v
 add_files -fileset constrs_1 -norecurse ./constraints/minisys_fmcpga_tft.xdc

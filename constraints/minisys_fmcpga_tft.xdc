@@ -6,6 +6,10 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property PACKAGE_PIN Y18 [get_ports clk_100m]
 set_property IOSTANDARD LVCMOS33 [get_ports clk_100m]
 create_clock -period 10.000 -name sys_clk [get_ports clk_100m]
+set_clock_groups -asynchronous \
+    -group [get_clocks -quiet sys_clk] \
+    -group [get_clocks -quiet pll_clk] \
+    -group [get_clocks -quiet pll_clk_1]
 
 ## Buttons
 set_property PACKAGE_PIN R1  [get_ports btn_up]
@@ -93,6 +97,10 @@ set_property PACKAGE_PIN C14 [get_ports {seg_seg[5]}]
 set_property PACKAGE_PIN C15 [get_ports {seg_seg[6]}]
 set_property PACKAGE_PIN E13 [get_ports {seg_seg[7]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {seg_an[*] seg_seg[*]}]
+
+## Buzzer
+set_property PACKAGE_PIN A19 [get_ports BUZZER_O]
+set_property IOSTANDARD LVCMOS33 [get_ports BUZZER_O]
 
 ## TFT RGB output
 set_property PACKAGE_PIN G17 [get_ports {TFT_R_O[0]}]

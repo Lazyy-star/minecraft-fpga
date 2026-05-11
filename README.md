@@ -12,6 +12,7 @@ Vivado 生成目录不提交到仓库；请使用 `scripts/` 下的 Tcl 脚本�
 - 主时钟：`clk_100m`，100 MHz
 - 显示接口：800x480 TFT，RGB323 输出
 - 渲染帧缓冲：320x240，RGB444
+- 渲染管线时钟：6.25 MHz；TFT 像素时钟独立保持约 33.33 MHz
 - 资源初始化：由 COE 转换为 MEM，再通过 `$readmemh` 初始化 RAM/ROM
 - 辅助脚本：Tcl、PowerShell
 
@@ -48,6 +49,9 @@ rtl/tft/
 rtl/adapter/
   320x240 FmcPGA 帧缓冲到 800x480 TFT 的读地址映射，
   以及 RGB444 到 RGB323 的颜色转换。
+
+rtl/audio/
+  A19 蜂鸣器方波音频，包含原创背景旋律和放置/挖掘交互音效。
 
 rtl/vhdl/
   FmcPGA 核心扁平化 VHDL wrapper。
@@ -118,8 +122,20 @@ TFT_B_O = rgb444[3:1]
 - `S6` / `btn_reset`：复位
 - `SW[4:0]`：选择方块 ID，推荐范围 `0` 到 `23`
 - `SW[5]`：动作模式，`0` 表示放置所选方块，`1` 表示挖掘准星选中的方块
+- `SW[6]`：视角模式，`0` 为移动模式，`1` 为旋转视角模式
+- `SW[7]`：背景音乐静音，`0` 播放，`1` 静音
 
 `S5` 每次按下只触发一次动作。挖掘不会因为 `SW[5]` 保持为高而连续执行。
+
+在 `SW[6] = 1` 时，S1/S2 控制左右转向，S3/S4 控制上下视角；S5、`SW[4:0]` 和 `SW[5]` 的方块交互功能保持不变。画面右下角会绘制一个手持方块 HUD，颜色随当前 `SW[4:0]` 选择的方块变化。
+
+## 蜂鸣器音频
+
+Minisys 实验板的蜂鸣器连接到 FPGA 的 A19 管脚，本项目顶层端口为 `BUZZER_O`。`rtl/audio/buzzer_audio.v` 使用 `clk_100m` 产生方波音频：
+
+- 背景音乐：原创的慢速方波旋律，气质上参考 Minecraft 的舒缓环境音乐，但不直接复刻原曲。
+- 交互音效：S5 触发时播放短音效，放置方块为上行音，挖掘方块为下行音；音效优先级高于背景音乐。
+- 静音控制：`SW[7] = 1` 时关闭背景音乐，但交互音效仍会播放。
 
 ## IP 替代与资源
 
@@ -220,6 +236,8 @@ powershell -ExecutionPolicy Bypass -File scripts/check_requested_adjustments.ps1
 - `rtl/tft/tft_timing.v`：800x480 TFT 时序
 - `rtl/adapter/fmcpga_tft_read_mapper.v`：帧缓冲读地址映射
 - `rtl/adapter/fmcpga_rgb444_to_rgb323.v`：颜色格式转换
+- `rtl/adapter/fmcpga_hand_overlay.v`：手持方块 HUD 叠加
+- `rtl/audio/buzzer_audio.v`：蜂鸣器背景音乐与交互音效
 - `rtl/ip_replacements/`：Vivado IP 源码替代模块
 - `constraints/minisys_fmcpga_tft.xdc`：Minisys 约束
 - `scripts/create_fmcpga_tft_project.tcl`：正式工程创建脚本
