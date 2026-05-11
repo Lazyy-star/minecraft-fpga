@@ -6,7 +6,14 @@ if {![file exists $bit_file]} {
 
 open_hw
 connect_hw_server
-open_hw_target
+
+set targets [get_hw_targets *]
+if {[llength $targets] == 0} {
+  error "No hardware target found. Check board power, JTAG cable, USB driver, and that no other Vivado session owns the cable."
+}
+
+current_hw_target [lindex $targets 0]
+open_hw_target [current_hw_target]
 
 set devices [get_hw_devices]
 if {[llength $devices] == 0} {
