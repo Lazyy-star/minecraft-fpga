@@ -12,7 +12,7 @@ module clk_ppl_generator (
         .CLKFBOUT_MULT(8),
         .CLKFBOUT_PHASE(0.0),
         .CLKIN1_PERIOD(10.0),
-        .CLKOUT0_DIVIDE(128),
+        .CLKOUT0_DIVIDE(107),
         .CLKOUT0_DUTY_CYCLE(0.5),
         .CLKOUT0_PHASE(0.0),
         .DIVCLK_DIVIDE(1),

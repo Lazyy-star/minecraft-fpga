@@ -17,29 +17,30 @@ module fmcpga_hand_overlay (
 
     always @* begin
         case (selected_block)
-            5'd1:  block_color = 12'h6b4;
-            5'd2:  block_color = 12'h754;
-            5'd3:  block_color = 12'h888;
-            5'd4:  block_color = 12'h643;
-            5'd5:  block_color = 12'hb96;
-            5'd6:  block_color = 12'h584;
-            5'd7:  block_color = 12'h444;
-            5'd8:  block_color = 12'h36c;
-            5'd9:  block_color = 12'h24b;
-            5'd10: block_color = 12'he62;
-            5'd11: block_color = 12'hf82;
-            5'd12: block_color = 12'hed9;
-            5'd13: block_color = 12'h777;
-            5'd14: block_color = 12'hec4;
-            5'd15: block_color = 12'hc97;
-            5'd16: block_color = 12'h333;
-            5'd17: block_color = 12'h742;
-            5'd18: block_color = 12'h383;
-            5'd19: block_color = 12'hee4;
-            5'd20: block_color = 12'hade;
-            5'd21: block_color = 12'h45b;
-            5'd22: block_color = 12'hd44;
-            5'd23: block_color = 12'h83a;
+            5'd0:  block_color = 12'h777;
+            5'd1:  block_color = 12'h777;
+            5'd2:  block_color = 12'h774;
+            5'd3:  block_color = 12'h864;
+            5'd4:  block_color = 12'h777;
+            5'd5:  block_color = 12'h555;
+            5'd6:  block_color = 12'hcb7;
+            5'd7:  block_color = 12'h984;
+            5'd8:  block_color = 12'hcca;
+            5'd9:  block_color = 12'h763;
+            5'd10: block_color = 12'h888;
+            5'd11: block_color = 12'h888;
+            5'd12: block_color = 12'hdda;
+            5'd13: block_color = 12'h24f;
+            5'd14: block_color = 12'hddd;
+            5'd15: block_color = 12'hfe4;
+            5'd16: block_color = 12'h6dd;
+            5'd17: block_color = 12'h999;
+            5'd18: block_color = 12'h965;
+            5'd19: block_color = 12'ha54;
+            5'd20: block_color = 12'h764;
+            5'd21: block_color = 12'h763;
+            5'd22: block_color = 12'h666;
+            5'd23: block_color = 12'hdff;
             default: block_color = 12'haaa;
         endcase
 

@@ -53,7 +53,7 @@ package constants is
     constant ANGLE_STEP: int := 5;
 
     -- time constants.
-    constant PPL_FREQ: integer := 6250000;
+    constant PPL_FREQ: integer := 7476636;
 end package;
 
 

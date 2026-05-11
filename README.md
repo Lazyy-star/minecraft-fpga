@@ -12,7 +12,7 @@ Vivado 生成目录不提交到仓库；请使用 `scripts/` 下的 Tcl 脚本�
 - 主时钟：`clk_100m`，100 MHz
 - 显示接口：800x480 TFT，RGB323 输出
 - 渲染帧缓冲：320x240，RGB444
-- 渲染管线时钟：6.25 MHz；TFT 像素时钟独立保持约 33.33 MHz
+- 渲染管线时钟：约 7.48 MHz；TFT 像素时钟独立保持约 33.33 MHz
 - 资源初始化：由 COE 转换为 MEM，再通过 `$readmemh` 初始化 RAM/ROM
 - 辅助脚本：Tcl、PowerShell
 
