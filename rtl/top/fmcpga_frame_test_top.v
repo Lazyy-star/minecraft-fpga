@@ -20,7 +20,8 @@ module fmcpga_frame_test_top (
     output wire        TFT_DE_O,
     output wire        TFT_HSYNC_O,
     output wire        TFT_VSYNC_O,
-    output wire        TFT_MODE_O
+    output wire        TFT_MODE_O,
+    output wire        BUZZER_O
 );
     wire clk_tft;
     wire locked;
@@ -77,6 +78,7 @@ module fmcpga_frame_test_top (
     assign TFT_DE_O = video_on;
     assign TFT_ADJ_O = 1'b1;
     assign TFT_MODE_O = 1'b1;
+    assign BUZZER_O = 1'b0;
     assign led_r = src_addr[7:0];
     assign led_g = {7'd0, src_active};
     assign led_y = sw[7:0];

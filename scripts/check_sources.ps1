@@ -6,6 +6,8 @@ $required = @(
     "rtl\tft\tft_timing.v",
     "rtl\adapter\fmcpga_tft_read_mapper.v",
     "rtl\adapter\fmcpga_rgb444_to_rgb323.v",
+    "rtl\adapter\fmcpga_hand_overlay.v",
+    "rtl\audio\buzzer_audio.v",
     "rtl\top\fmcpga_frame_test_top.v",
     "rtl\top\minisys_fmcpga_tft_top.v",
     "rtl\ip_replacements\clk_ppl_generator.v",

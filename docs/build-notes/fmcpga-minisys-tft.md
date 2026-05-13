@@ -5,6 +5,8 @@
 Vivado 2018.3
 Part: xc7a100tfgg484-1
 Board clock: 100 MHz on `clk_100m`
+Render pipeline clock: approximately 7.48 MHz after enabling dynamic view rotation
+TFT pixel clock: approximately 33.33 MHz
 
 ## Project Scripts
 

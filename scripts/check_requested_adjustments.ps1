@@ -13,7 +13,8 @@ $expectedConnections = @(
     "\.btn_front_in\(btn_left\)",
     "\.btn_back_in\(btn_right\)",
     "\.btn_left_in\(btn_down\)",
-    "\.btn_right_in\(btn_up\)"
+    "\.btn_right_in\(btn_up\)",
+    "\.view_mode_in\(view_mode\)"
 )
 
 foreach ($pattern in $expectedConnections) {

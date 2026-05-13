@@ -12,6 +12,7 @@ entity fmcpga_core_flat is
         clk_sys, rst: in std_logic;
 
         btn_front_in, btn_back_in, btn_left_in, btn_right_in, btn_up_in, btn_down_in: in std_logic;
+        view_mode_in: in std_logic;
         place_in: in std_logic;
         dig_in: in std_logic;
         selected_block_in: in std_logic_vector(BLOCK_TYPE_RADIX - 1 downto 0);
@@ -398,7 +399,7 @@ begin
     -- Player pose synchronization
         p_pose_reg: player_pose_register
             port map (
-                clk => clk_sys,
+                clk => clk_ppl,
                 rst => rst,
                 update_sync => end_of_frame,
                 p_pos_in => current_pos,
@@ -634,13 +635,13 @@ begin
             fps;
 
     -- Peripherals
-        btn_front_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => btn_front_in, btn_out => btn_front);
-        btn_back_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => btn_back_in, btn_out => btn_back);
-        btn_left_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => btn_left_in, btn_out => btn_left);
-        btn_right_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => btn_right_in, btn_out => btn_right);
-        btn_up_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => btn_up_in, btn_out => btn_up);
-        btn_down_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => btn_down_in, btn_out => btn_down);
-        btn_action_state: debounced_button port map (clk => clk_sys, rst => rst, btn_in => place_in, btn_out => action_btn);
+        btn_front_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => btn_front_in, btn_out => btn_front);
+        btn_back_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => btn_back_in, btn_out => btn_back);
+        btn_left_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => btn_left_in, btn_out => btn_left);
+        btn_right_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => btn_right_in, btn_out => btn_right);
+        btn_up_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => btn_up_in, btn_out => btn_up);
+        btn_down_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => btn_down_in, btn_out => btn_down);
+        btn_action_state: debounced_button port map (clk => clk_ppl, rst => rst, btn_in => place_in, btn_out => action_btn);
 
         fps_hundreds <= std_logic_vector(to_unsigned(fps / 100 mod 10, 4));
         fps_tens <= std_logic_vector(to_unsigned(fps / 10 mod 10, 4));
@@ -675,11 +676,11 @@ begin
                 current_pos => current_pos,
                 current_angle => current_angle
             );
-        move_lr_offset <= 127 when btn_right = '1' else -128 when btn_left = '1' else 0;
-        move_fb_offset <= 127 when btn_front = '1' else -128 when btn_back = '1' else 0;
+        move_lr_offset <= 127 when view_mode_in = '0' and btn_right = '1' else -128 when view_mode_in = '0' and btn_left = '1' else 0;
+        move_fb_offset <= 127 when view_mode_in = '0' and btn_front = '1' else -128 when view_mode_in = '0' and btn_back = '1' else 0;
         move_ud_offset <= 0;
-        angle_lr_offset <= 0;
-        angle_ud_offset <= 0;
+        angle_lr_offset <= 127 when view_mode_in = '1' and btn_right = '1' else -128 when view_mode_in = '1' and btn_left = '1' else 0;
+        angle_ud_offset <= 127 when view_mode_in = '1' and btn_front = '1' else -128 when view_mode_in = '1' and btn_back = '1' else 0;
         left_click <= '0';
         right_click <= '0';
         last_item_click <= '0';

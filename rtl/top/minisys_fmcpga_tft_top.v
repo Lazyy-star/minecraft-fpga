@@ -20,7 +20,8 @@ module minisys_fmcpga_tft_top (
     output wire        TFT_DE_O,
     output wire        TFT_HSYNC_O,
     output wire        TFT_VSYNC_O,
-    output wire        TFT_MODE_O
+    output wire        TFT_MODE_O,
+    output wire        BUZZER_O
 );
     wire clk_tft;
     wire locked;
@@ -33,14 +34,18 @@ module minisys_fmcpga_tft_top (
     reg  video_on_d;
     reg  hs_d;
     reg  vs_d;
+    reg  [9:0] pix_x_d;
+    reg  [9:0] pix_y_d;
     wire [9:0] pix_x;
     wire [9:0] pix_y;
     wire [16:0] fb_addr;
     wire [11:0] fb_rgb444;
+    wire [11:0] display_rgb444;
     wire [3:0] fps_hundreds;
     wire [3:0] fps_tens;
     wire [3:0] fps_ones;
     wire [3:0] current_item_ones;
+    wire view_mode = sw[6];
 
     tft_clock_gen u_clk (
         .clk_100m(clk_100m),
@@ -75,11 +80,15 @@ module minisys_fmcpga_tft_top (
             video_on_d <= 1'b0;
             hs_d <= 1'b1;
             vs_d <= 1'b1;
+            pix_x_d <= 10'd0;
+            pix_y_d <= 10'd0;
         end else begin
             src_active_d <= src_active;
             video_on_d <= video_on_raw;
             hs_d <= hs_raw;
             vs_d <= vs_raw;
+            pix_x_d <= pix_x;
+            pix_y_d <= pix_y;
         end
     end
 
@@ -92,6 +101,7 @@ module minisys_fmcpga_tft_top (
         .btn_right_in(btn_up),
         .btn_up_in(1'b0),
         .btn_down_in(1'b0),
+        .view_mode_in(view_mode),
         .place_in(btn_action),
         .dig_in(sw[5]),
         .selected_block_in(sw[4:0]),
@@ -105,12 +115,31 @@ module minisys_fmcpga_tft_top (
         .current_item_ones(current_item_ones)
     );
 
+    fmcpga_hand_overlay u_hand (
+        .active(src_active_d),
+        .pix_x(pix_x_d),
+        .pix_y(pix_y_d),
+        .selected_block(sw[4:0]),
+        .rgb444_in(fb_rgb444),
+        .rgb444_out(display_rgb444)
+    );
+
     fmcpga_rgb444_to_rgb323 u_rgb (
         .active(src_active_d),
-        .rgb444(fb_rgb444),
+        .rgb444(display_rgb444),
         .tft_r(TFT_R_O),
         .tft_g(TFT_G_O),
         .tft_b(TFT_B_O)
+    );
+
+    buzzer_audio u_audio (
+        .clk(clk_100m),
+        .rst(rst),
+        .music_enable(~sw[7]),
+        .action_event(btn_action),
+        .dig_mode(sw[5]),
+        .selected_block(sw[4:0]),
+        .buzzer(BUZZER_O)
     );
 
     assign TFT_CLK_O = ~clk_tft;
@@ -122,7 +151,7 @@ module minisys_fmcpga_tft_top (
 
     assign led_r = {fps_hundreds, fps_tens};
     assign led_g = {fps_ones, current_item_ones};
-    assign led_y = {sw[5], btn_action, sw[4:0], src_active};
+    assign led_y = {sw[7], view_mode, sw[5], btn_action, sw[3:0]};
     assign seg_an = 8'hff;
     assign seg_seg = 8'hff;
 endmodule

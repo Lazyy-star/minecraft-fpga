@@ -9,6 +9,7 @@ file mkdir ./reports
 
 add_files -norecurse [glob ./rtl/tft/*.v]
 add_files -norecurse [glob ./rtl/adapter/*.v]
+add_files -norecurse [glob ./rtl/audio/*.v]
 add_files -norecurse ./rtl/top/fmcpga_frame_test_top.v
 add_files -fileset constrs_1 -norecurse ./constraints/minisys_fmcpga_tft.xdc
 
