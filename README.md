@@ -206,6 +206,19 @@ wait_on_run synth_1
 
 ## 烧录开发板
 
+### 临时烧录到 FPGA
+
+这种方式通过 JTAG 把 `.bit` 下载到 FPGA 配置 SRAM，适合调试；板子断电后配置会丢失。
+
+在 Vivado 2018.3 Tcl Console 中执行：
+
+```tcl
+cd C:/Users/32915/Desktop/shudiankeshe
+source scripts/program_fmcpga_tft.tcl
+```
+
+等价的手动命令如下：
+
 ```tcl
 open_hw
 connect_hw_server
@@ -214,6 +227,58 @@ current_hw_device [lindex [get_hw_devices] 0]
 refresh_hw_device [current_hw_device]
 set_property PROGRAM.FILE {C:/Users/32915/Desktop/shudiankeshe/vivado_fmcpga_tft/fmcpga_minisys_tft.runs/impl_1/minisys_fmcpga_tft_top.bit} [current_hw_device]
 program_hw_devices [current_hw_device]
+```
+
+### 持久烧录到 SPI Flash
+
+这种方式会先把 bitstream 转成 `.mcs` 配置文件，再写入 Minisys 板载 SPI Flash。写入成功后，把 Minisys 编程跳线设置为上电从 SPI Flash 启动，之后每次打开板子都会自动加载本项目，不需要重新综合或重新 JTAG 烧录。
+
+先确保已经完成构建并生成 bitstream：
+
+```text
+vivado_fmcpga_tft/fmcpga_minisys_tft.runs/impl_1/minisys_fmcpga_tft_top.bit
+```
+
+然后在 Vivado 2018.3 Tcl Console 中执行：
+
+```tcl
+cd C:/Users/32915/Desktop/shudiankeshe
+source scripts/program_fmcpga_tft_flash.tcl
+```
+
+当前开发板经 Vivado 实测识别为 `n25q64-3.3v`，在 Vivado 2018.3 中对应 `n25q64-3.3v-spi-x1_x2_x4`。若 Vivado 中的 Flash part 名称仍需手动指定，可以在 `source` 前设置 part 和容量：
+
+```tcl
+set minisys_cfgmem_part_name n25q64-3.3v-spi-x1_x2_x4
+set minisys_cfgmem_size_mbit 64
+source scripts/program_fmcpga_tft_flash.tcl
+```
+
+如果 Vivado 报告找不到该 Flash part，可先查询本机 Vivado 2018.3 支持的候选名称：
+
+```tcl
+get_cfgmem_parts *n25q*
+```
+
+写入完成后执行硬件验证：
+
+1. 关闭开发板电源。
+2. 按 Minisys 硬件手册把编程跳线设置为从 SPI Flash 启动。
+3. 重新上电。
+4. 不执行 Vivado 烧录命令，确认 TFT 直接显示本项目画面。
+
+若上电后没有反应，可以先只校验 Flash 内容是否仍与生成的 `.mcs` 一致。该命令会临时配置 FPGA 用于访问 SPI Flash，但不会擦除或重写 Flash：
+
+```tcl
+cd C:/Users/32915/Desktop/shudiankeshe
+source scripts/verify_fmcpga_tft_flash.tcl
+```
+
+如果 Verify 通过但上电仍无画面，请断电、确认跳线已经设置为从 SPI Flash 启动、重新上电，然后只读取 FPGA 启动状态：
+
+```tcl
+cd C:/Users/32915/Desktop/shudiankeshe
+source scripts/check_fmcpga_tft_boot_status.tcl
 ```
 
 ## 检查脚本
