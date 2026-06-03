@@ -27,3 +27,15 @@ reports/
 Thumbs.db
 Desktop.ini
 
+# Local document tooling and scratch artifacts
+LibreOffice/
+lo-profile/
+LibreOffice_*.msi
+word_env_test.docx
+word_env_test.pdf
+libreoffice-*.log
+
+# Local report drafts/backups that are not part of the source deliverable
+docs/*备份*.docx
+docs/双项目合并报告.docx
+tools/build_combined_report.py
