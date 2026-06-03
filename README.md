@@ -4,6 +4,23 @@
 
 Vivado 生成目录不提交到仓库；请使用 `scripts/` 下的 Tcl 脚本重新创建工程。
 
+## 快速复现
+
+克隆仓库后，在 Vivado 2018.3 Tcl Console 中进入仓库根目录，再执行工程创建和构建脚本：
+
+```powershell
+git clone https://github.com/Lazyy-star/minecraft-fpga.git
+cd minecraft-fpga
+```
+
+```tcl
+cd <minecraft-fpga 仓库根目录>
+source scripts/create_fmcpga_tft_project.tcl
+source scripts/run_fmcpga_tft_build.tcl
+```
+
+仓库已经包含构建所需的 RTL、VHDL、约束、MEM 初始化文件、原始 COE/纹理资源和 Vivado Tcl 脚本；不需要提交或下载 Vivado 生成的工程目录。
+
 ## 技术栈与硬件
 
 - HDL：Verilog、VHDL 2008
@@ -167,7 +184,7 @@ powershell -ExecutionPolicy Bypass -File scripts/convert_coe_to_mem.ps1
 在 Vivado 2018.3 Tcl Console 中执行：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/create_fmcpga_tft_project.tcl
 source scripts/run_fmcpga_tft_build.tcl
 ```
@@ -175,7 +192,7 @@ source scripts/run_fmcpga_tft_build.tcl
 也可以手动分步运行：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/create_fmcpga_tft_project.tcl
 reset_run synth_1
 launch_runs synth_1
@@ -198,7 +215,7 @@ vivado_fmcpga_tft/fmcpga_minisys_tft.runs/impl_1/minisys_fmcpga_tft_top.bit
 如果只想先验证 TFT 时序、颜色输出和 320x240 到 800x480 的映射链路，可创建 smoke test 工程：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/create_fmcpga_tft_smoke_project.tcl
 launch_runs synth_1
 wait_on_run synth_1
@@ -213,7 +230,7 @@ wait_on_run synth_1
 在 Vivado 2018.3 Tcl Console 中执行：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/program_fmcpga_tft.tcl
 ```
 
@@ -225,7 +242,7 @@ connect_hw_server
 open_hw_target
 current_hw_device [lindex [get_hw_devices] 0]
 refresh_hw_device [current_hw_device]
-set_property PROGRAM.FILE {C:/Users/32915/Desktop/shudiankeshe/vivado_fmcpga_tft/fmcpga_minisys_tft.runs/impl_1/minisys_fmcpga_tft_top.bit} [current_hw_device]
+set_property PROGRAM.FILE {vivado_fmcpga_tft/fmcpga_minisys_tft.runs/impl_1/minisys_fmcpga_tft_top.bit} [current_hw_device]
 program_hw_devices [current_hw_device]
 ```
 
@@ -242,7 +259,7 @@ vivado_fmcpga_tft/fmcpga_minisys_tft.runs/impl_1/minisys_fmcpga_tft_top.bit
 然后在 Vivado 2018.3 Tcl Console 中执行：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/program_fmcpga_tft_flash.tcl
 ```
 
@@ -270,14 +287,14 @@ get_cfgmem_parts *n25q*
 若上电后没有反应，可以先只校验 Flash 内容是否仍与生成的 `.mcs` 一致。该命令会临时配置 FPGA 用于访问 SPI Flash，但不会擦除或重写 Flash：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/verify_fmcpga_tft_flash.tcl
 ```
 
 如果 Verify 通过但上电仍无画面，请断电、确认跳线已经设置为从 SPI Flash 启动、重新上电，然后只读取 FPGA 启动状态：
 
 ```tcl
-cd C:/Users/32915/Desktop/shudiankeshe
+cd <minecraft-fpga 仓库根目录>
 source scripts/check_fmcpga_tft_boot_status.tcl
 ```
 
