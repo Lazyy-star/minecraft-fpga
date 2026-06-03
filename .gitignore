@@ -38,4 +38,5 @@ libreoffice-*.log
 # Local report drafts/backups that are not part of the source deliverable
 docs/*备份*.docx
 docs/双项目合并报告.docx
+docs/项目报告.md
 tools/build_combined_report.py
